@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import { useDispatch } from 'react-redux';
+import { addItem,delItem } from '../redux/action';
 
 export const Products = () => {
 
@@ -63,6 +65,19 @@ export const Products = () => {
       </div>
       
       {filter.map((product) => {
+const dispatch = useDispatch()
+const [CartBtn, setCartBtn] = useState ("Agregar al carrito")
+const handleCart =(product) =>{
+  if (CartBtn === "Agregar al carrito"){
+    dispatch(addItem(product))
+    setCartBtn ("Eliminar del carrito")
+  }
+  else{
+    dispatch(delItem(product))
+    setCartBtn("Agregar al carrito")
+  }
+}
+
         return (
           <>
             <div className="col-md-3 mb-4">
@@ -71,7 +86,7 @@ export const Products = () => {
                 <div class="card-body">
                   <h5 class="card-title mb-0">{product.title.substring(0,12)}...</h5>
                   <p class="card-text lead fw-bold">${product.price}</p>
-                  <a class="btn btn-outline-dark"><NavLink  to={`/products/${product.id}`}>Agregar al Carrito</NavLink></a>
+                  <button onClick={()=>handleCart(product)} className="btn btn-outline-dark"><NavLink  to={`/products/${product.id}`}>{CartBtn}</NavLink></button>
                 </div>
               </div>
             </div>

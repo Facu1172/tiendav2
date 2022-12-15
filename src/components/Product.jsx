@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
+import {addItem,delItem} from '../redux/action/index'
 import { NavLink } from 'react-router-dom';
-
+import Skeleton from 'react-loading-skeleton';
 
 
 
@@ -9,6 +11,11 @@ export const Product = () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
+    const addProduct = (product) => {
+        dispatch(addItem(product))
+    }
 
     useEffect(()=> {
         const getProduct = async () => {
@@ -23,7 +30,18 @@ export const Product = () => {
     const Loading = () => {
         return(
             <>
-                Loading...
+               <div className="col-md-6" style={{lineHeigth:2}}>
+                <Skeleton height={400}/>
+               </div>
+               <div className="col-md-6">
+                <Skeleton height={50} width={300}/>
+                <Skeleton height={75}/>
+                <Skeleton height={25} width={150}/>
+                <Skeleton height={50}/>
+                <Skeleton height={150}/>
+                <Skeleton height={50} width={100}/>
+                <Skeleton height={50} width={100} style={{marginLeft:6}}/>
+               </div>
             </>
         )
     }
@@ -45,8 +63,9 @@ export const Product = () => {
     </p>
     <h3 className="display-6 fw-bold my-4">${product.price}</h3>
     <p className="lead">{product.description}</p>
-    <button className="btn btn-outline-dark">Agregar al carrito</button>
-    <NavLink className="btn btn-dark ms-2" to="/cart">Ir al carrito</NavLink>
+    <button className="btn btn-outline-dark"
+    onClick={()=>addProduct(product)}>Agregar al carrito</button>
+    
 </div>
             </>
         )
